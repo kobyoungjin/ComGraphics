@@ -1,12 +1,2 @@
-﻿  cameraclass.cpp
-  colorshaderclass.cpp
-  d3dclass.cpp
-  graphicsclass.cpp
-E:\Github\ComGraphics\Shader\Shader\graphicsclass.cpp(254,34): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-E:\Github\ComGraphics\Shader\Shader\graphicsclass.cpp(223,8): warning C4101: 'rotation' :참조되지 않은 지역 변수입니다.
-  inputclass.cpp
-  main.cpp
-  modelclass.cpp
-  systemclass.cpp
-  코드를 생성하고 있습니다...
+﻿  systemclass.cpp
   Shader.vcxproj -> E:\Github\ComGraphics\Shader\Debug\Shader.exe

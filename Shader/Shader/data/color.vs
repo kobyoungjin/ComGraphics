@@ -15,6 +15,7 @@ cbuffer MatrixBuffer
 	matrix worldMatrix;
 	matrix viewMatrix;
 	matrix projectionMatrix;
+    float bright;
 };
 
 
@@ -64,7 +65,7 @@ PixelInputType ColorVertexShader(VertexInputType input)
     output.position = mul(output.position, projectionMatrix);
     
 	// Store the input color for the pixel shader to use.
-    output.color = input.color;
+    output.color = input.color * bright;
 
     return output;
 }

@@ -137,49 +137,33 @@ bool SystemClass::Frame()
 	{
 		return false;
 	}
-	else if (m_Input->IsKeyDown('R'))
+	if (m_Input->IsKeyDown('R'))
 	{
 		m_Graphics->SetColor('R'); //Red
-
-		result = m_Graphics->Frame();
 	}
-	else if (m_Input->IsKeyDown('G'))
+	if (m_Input->IsKeyDown('G'))
 	{
 		m_Graphics->SetColor('G'); //Green
-
-		result = m_Graphics->Frame();
 	}
-	else if (m_Input->IsKeyDown('B'))
+	if (m_Input->IsKeyDown('B'))
 	{
 		m_Graphics->SetColor('B'); //Blue
-
-		result = m_Graphics->Frame();
 	}
-
-	else if (m_Input->IsKeyDown('W'))
+	if (m_Input->IsKeyDown('W'))
 	{
 		m_Graphics->GetD3DClass()->SetMode(D3D11_FILL_MODE::D3D11_FILL_WIREFRAME);
-
-		return true;
 	}
-	else if (m_Input->IsKeyDown('S'))
+	if (m_Input->IsKeyDown('S'))
 	{
 		m_Graphics->GetD3DClass()->SetMode(D3D11_FILL_MODE::D3D11_FILL_SOLID);
-
-		return true;
 	}
-
-	else if (m_Input->IsKeyDown('1'))
+	if (m_Input->IsKeyDown(49))
 	{
 		m_Graphics->SetBright(1.0f);
-
-		return true;
 	}
-	else if (m_Input->IsKeyDown('2'))
+	if (m_Input->IsKeyDown(50))
 	{
 		m_Graphics->SetBright(0.5f);
-
-		return true;
 	}
 
 	// Do the frame processing for the graphics object.
