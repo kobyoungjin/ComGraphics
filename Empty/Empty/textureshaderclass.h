@@ -42,7 +42,7 @@ public:
 	bool Initialize(ID3D11Device*, HWND);
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*, int, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView*);
-
+	void SetFilter(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3D11_FILTER filterType);
 private:
 	bool InitializeShader(ID3D11Device*, HWND, const WCHAR*, const WCHAR*);
 	void ShutdownShader();
@@ -50,6 +50,7 @@ private:
 
 	bool SetShaderParameters(ID3D11DeviceContext*, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView*);
 	void RenderShader(ID3D11DeviceContext*, int);
+	
 
 private:
 	ID3D11VertexShader* m_vertexShader;
@@ -57,6 +58,7 @@ private:
 	ID3D11InputLayout* m_layout;
 	ID3D11Buffer* m_matrixBuffer;
 	ID3D11SamplerState* m_sampleState;
+	D3D11_FILTER type;
 };
 
 #endif

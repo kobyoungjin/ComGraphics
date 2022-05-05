@@ -36,14 +36,17 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	bool Frame();
-
+	void SetFilter(D3D11_FILTER filterType);
 private:
 	bool Render(float);
-
+	
 private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
+	ModelClass* m_Model1;
+	ModelClass* m_Model2;
+	ModelClass* m_Model3;
 	TextureShaderClass* m_TextureShader;
 };
 

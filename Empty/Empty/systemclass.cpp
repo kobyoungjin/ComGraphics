@@ -137,6 +137,18 @@ bool SystemClass::Frame()
 	{
 		return false;
 	}
+	else if (m_Input->IsKeyDown(0x33))
+	{
+		m_Graphics->SetFilter(D3D11_FILTER_MIN_MAG_MIP_POINT);
+	}
+	else if (m_Input->IsKeyDown(0x34))
+	{
+		m_Graphics->SetFilter(D3D11_FILTER_MIN_MAG_MIP_LINEAR); 
+	}
+	else if (m_Input->IsKeyDown(0x35))
+	{
+		m_Graphics->SetFilter(D3D11_FILTER_ANISOTROPIC);
+	}
 
 	// Do the frame processing for the graphics object.
 	result = m_Graphics->Frame();

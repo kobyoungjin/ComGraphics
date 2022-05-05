@@ -11,6 +11,7 @@ TextureShaderClass::TextureShaderClass()
 	m_layout = 0;
 	m_matrixBuffer = 0;
 	m_sampleState = 0;
+	type = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 }
 
 
@@ -200,7 +201,7 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd,
 	// AddressUand AddressV are set to Wrap which ensures that the coordinates stay between 0.0f and 
 	// 1.0f. Anything outside of that wraps around and is placed between 0.0f and 1.0f. All other 
 	// settings for the sampler state description are defaults.
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.Filter = type;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -222,6 +223,29 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd,
 	}
 
 	return true;
+}
+
+void TextureShaderClass::SetFilter(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3D11_FILTER filterType)
+{
+	D3D11_SAMPLER_DESC samplerDesc;
+
+	deviceContext->PSGetSamplers(0, 1, &m_sampleState);
+	m_sampleState->GetDesc(&samplerDesc);
+
+	samplerDesc.Filter = filterType;
+
+	if(filterType == D3D11_FILTER_ANISOTROPIC)
+	{
+		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MaxAnisotropy = 2;
+		samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	}
+
+	device->CreateSamplerState(&samplerDesc, &m_sampleState);
+	deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 }
 
 

@@ -166,14 +166,15 @@
     <ClCompile Include="textureshaderclass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="data\chair_d.dds" />
-    <Image Include="data\seafloor.dds" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="data\color.ps" />
     <None Include="data\color.vs" />
     <None Include="data\texture.ps" />
     <None Include="data\texture.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\faaaf9bf.dds" />
+    <Image Include="data\gun2_d.dds" />
+    <Image Include="data\sample_d.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
