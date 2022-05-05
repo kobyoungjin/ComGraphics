@@ -51,8 +51,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);	// for cube model
-//	m_Camera->SetPosition(0.0f, 0.5f, -3.0f);	// for chair model
+	//m_Camera->SetPosition(0.0f, 0.0f, -5.0f);	// for cube model
+	m_Camera->SetPosition(0.0f, 0.5f, -3.0f);	// for chair model
 	
 	// Create the model object.
 	m_Model = new ModelClass;
@@ -62,8 +62,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/cube.obj", L"./data/seafloor.dds");
-//	result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/chair.obj", L"./data/chair_d.dds");
+	//result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/cube.obj", L"./data/seafloor.dds");
+	result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/chair.obj", L"./data/chair_d.dds");
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
