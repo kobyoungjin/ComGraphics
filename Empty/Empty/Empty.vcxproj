@@ -172,6 +172,7 @@
     <None Include="data\texture.vs" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="data\brick_d.dds" />
     <Image Include="data\faaaf9bf.dds" />
     <Image Include="data\gun2_d.dds" />
     <Image Include="data\sample_d.dds" />
