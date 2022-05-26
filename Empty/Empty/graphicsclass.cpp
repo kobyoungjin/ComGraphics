@@ -109,7 +109,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model3->Initialize(m_D3D->GetDevice(), L"./data/Rhino.obj", L"./data/sample_d.dds");
+	result = m_Model3->Initialize(m_D3D->GetDevice(), L"./data/ring.obj", L"./data/image.dds");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -279,8 +279,8 @@ bool GraphicsClass::Render(float rotation)
 	}
 
 	worldMatrix = XMMatrixIdentity();
-	worldMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	worldMatrix *= XMMatrixRotationY(rotation);
+	worldMatrix = XMMatrixScaling(0.05f, 0.05f, 0.05f);
+	worldMatrix *= XMMatrixRotationX(rotation);
 	worldMatrix *= XMMatrixTranslation(-1.5f, 0.1f, 0);
 
 	m_Model3->Render(m_D3D->GetDeviceContext());
