@@ -4,7 +4,7 @@
 #ifndef _INPUTCLASS_H_
 #define _INPUTCLASS_H_
 
-
+#include <dinput.h>
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: InputClass
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ public:
 	void KeyDown(unsigned int);
 	void KeyUp(unsigned int);
 
-	bool IsKeyDown(unsigned int);
+	bool IsKeyDown(unsigned int key);
 
 private:
 	bool m_keys[256];

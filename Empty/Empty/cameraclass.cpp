@@ -41,6 +41,13 @@ void CameraClass::SetRotation(float x, float y, float z)
 	m_rotation.z = z;
 }
 
+void CameraClass::MovePosition(float x, float y, float z)
+{
+	m_position.x += x * 0.02;
+	m_position.y += y * 0.02;
+	m_position.z += z * 0.02;
+}
+
 
 XMFLOAT3 CameraClass::GetPosition()
 {
@@ -76,6 +83,7 @@ void CameraClass::Render()
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
 	rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
+
 
 	// Transform the lookAt and up vector by the rotation matrix so the view is correctly rotated at the origin.
 	lookAt = XMVector3TransformCoord(lookAt, rotationMatrix);

@@ -9,6 +9,7 @@ GraphicsClass::GraphicsClass()
 	m_D3D = 0;
 	m_Camera = 0;
 	m_Model = 0;
+	m_Model2 = 0;
 	m_LightShader = 0;
 	m_Light = 0;
 }
@@ -63,9 +64,22 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/cube.obj", L"./data/seafloor.dds");
-//	result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/chair.obj", L"./data/chair_d.dds");
+	result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/cube.obj", L"./data/brick.dds");
 	if(!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
+	m_Model2 = new ModelClass;
+	if (!m_Model2)
+	{
+		return false;
+	}
+
+	// Initialize the model object.
+	result = m_Model2->Initialize(m_D3D->GetDevice(), L"./data/ring.obj", L"./data/image.dds");
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
@@ -100,7 +114,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 //	m_Light->SetDiffuseColor(0.0f, 0.0f, 0.0f, 1.0f);
 //	m_Light->SetDirection(0.0f, 0.0f, 1.0f);
 //	m_Light->SetDirection(1.0f, 0.0f, 0.0f);
-	m_Light->SetDirection(1.0f, 0.0f, 1.0f);
+	m_Light->SetDirection(1.0f, -0.5f, 1.0f);
 	m_Light->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetSpecularPower(32.0f);
 
@@ -116,6 +130,13 @@ void GraphicsClass::Shutdown()
 		m_Model->Shutdown();
 		delete m_Model;
 		m_Model = 0;
+	}
+
+	if (m_Model2)
+	{
+		m_Model2->Shutdown();
+		delete m_Model2;
+		m_Model2 = 0;
 	}
 
 	// Release the camera object.
@@ -175,6 +196,16 @@ bool GraphicsClass::Frame()
 	return true;
 }
 
+LightClass* GraphicsClass::GetLightClass()
+{
+	return m_Light;
+}
+
+CameraClass* GraphicsClass::GetCamerClass()
+{
+	return m_Camera;
+}
+
 bool GraphicsClass::Render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
@@ -191,16 +222,31 @@ bool GraphicsClass::Render(float rotation)
 	m_D3D->GetWorldMatrix(worldMatrix);
 	m_D3D->GetProjectionMatrix(projectionMatrix);
 
-	// Rotate the world matrix by the rotation value so that the triangle will spin.
-	worldMatrix = XMMatrixRotationY(rotation);
+	worldMatrix *= XMMatrixScaling(20, 0.1f, 20);
+	worldMatrix *= XMMatrixTranslation(0.0f, -5.0f, 10.0f);
 
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_D3D->GetDeviceContext());
 
+	result = m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix,
+		m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(), m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
+
+	if (!result)
+	{
+		return false;
+	}
+
+	worldMatrix = XMMatrixIdentity();
+	worldMatrix *= XMMatrixScaling(0.03f, 0.03f, 0.03f);
+	// Rotate the world matrix by the rotation value so that the triangle will spin.
+	worldMatrix *= XMMatrixRotationX(10);
+	//worldMatrix *= XMMatrixRotationY(rotation);
+
+	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_Model2->Render(m_D3D->GetDeviceContext());
+
 	// Render the model using the light shader.
-	result = m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model->GetIndexCount(), 
-		worldMatrix, viewMatrix, projectionMatrix,
-		m_Model->GetTexture(), 
+	result = m_LightShader->Render(m_D3D->GetDeviceContext(), m_Model2->GetVertexCount(), m_Model2->GetInstanceCount(), worldMatrix, viewMatrix, projectionMatrix,
+		m_Model2->GetTexture(), 
 		m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(),
 		m_Camera->GetPosition(), m_Light->GetSpecularColor(), m_Light->GetSpecularPower());
 	

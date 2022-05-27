@@ -52,6 +52,10 @@ private:
 
 	InputClass* m_Input;
 	GraphicsClass* m_Graphics;
+
+	bool b_ambient;
+	bool b_diffuse;
+	bool b_specular;
 };
 
 

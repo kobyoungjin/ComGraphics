@@ -37,6 +37,8 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	bool Frame();
+	LightClass* GetLightClass();
+	CameraClass* GetCamerClass();
 
 private:
 	bool Render(float);
@@ -44,7 +46,7 @@ private:
 private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
-	ModelClass* m_Model;
+	ModelClass* m_Model, * m_Model2;
 
 	LightShaderClass* m_LightShader;
 	LightClass* m_Light;
