@@ -133,6 +133,9 @@ void SystemClass::Run()
 bool SystemClass::Frame()
 {
 	bool result;
+	DIMOUSESTATE mouseCurrState;
+	m_Input->GetDiMouse()->Acquire();
+	m_Input->GetDiMouse()->GetDeviceState(sizeof(DIMOUSESTATE), &mouseCurrState);
 
 	// Check if the user pressed escape and wants to exit the application.
 	if (m_Input->IsKeyDown(VK_ESCAPE))
@@ -156,7 +159,7 @@ bool SystemClass::Frame()
 				b_ambient = false;
 				break;
 			}
-			else 
+			else
 			{
 				m_Graphics->GetLightClass()->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 				b_ambient = true;
@@ -164,7 +167,7 @@ bool SystemClass::Frame()
 			}
 		}
 	}
-	
+
 	if (m_Input->IsKeyDown(0x37))
 	{
 		while (1)
@@ -215,12 +218,12 @@ bool SystemClass::Frame()
 				break;
 			}
 		}
-		
+
 	}
 
 	if (m_Input->IsKeyDown(0x41) || m_Input->IsKeyDown(0x61))  // A
 	{
-		m_Graphics->GetCamerClass()->MovePosition(-2.0f, 0, 0);  
+		m_Graphics->GetCamerClass()->MovePosition(-2.0f, 0, 0);
 	}
 	if (m_Input->IsKeyDown(0x53) || m_Input->IsKeyDown(0x73))  // S
 	{
@@ -234,8 +237,7 @@ bool SystemClass::Frame()
 	{
 		m_Graphics->GetCamerClass()->MovePosition(0, 0, 2.0f);
 	}
-
-
+	m_Input->MouseInput(mouseCurrState);
 
 	// Do the frame processing for the graphics object.
 	result = m_Graphics->Frame();
@@ -390,23 +392,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 	switch (umessage)
 	{
 		// Check if the window is being destroyed.
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
+		case WM_DESTROY:
+		{
+			PostQuitMessage(0);
+			return 0;
+		}
 
-	// Check if the window is being closed.
-	case WM_CLOSE:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
+		// Check if the window is being closed.
+		case WM_CLOSE:
+		{
+			PostQuitMessage(0);
+			return 0;
+		}
 
-	// All other messages pass to the message handler in the system class.
-	default:
-	{
-		return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
-	}
+		// All other messages pass to the message handler in the system class.
+		default:
+		{
+			return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
+		}
 	}
 }

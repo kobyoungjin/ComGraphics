@@ -44,7 +44,7 @@ private:
 	bool Frame();
 	void InitializeWindows(int&, int&);
 	void ShutdownWindows();
-
+	
 private:
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;
