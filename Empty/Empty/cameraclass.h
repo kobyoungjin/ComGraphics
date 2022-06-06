@@ -30,25 +30,34 @@ public:
 
 	void SetPosition(float, float, float);
 	void SetRotation(float, float, float);
-	void MovePosition(float, float, float);
-	void SetFrameTime(float);
+	//void MoveLeft(float);
+	//void MoveRight(float);
+	//void MoveBack(float);
+	//void MoveForward(float);
+	//void MoveUp(float);
+	//void MoveDown(float);
 
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetRotation();
-	float GetYaw();
-	float GetPitch();
-	void SetYaw(float yaw);
-	void SetPitch(float pitch);
 
-
-	void Render();
+	void Render(float, float, float, float, XMVECTOR, XMVECTOR);
 	void GetViewMatrix(XMMATRIX&);
+	void RotateCamer(float, float, float);
+
+	XMVECTOR camPosition;
+	XMVECTOR camTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR m_camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f) , m_camForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+
+	XMVECTOR playerTarget = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR playerUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR playerRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f), playerForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+
 private:
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_rotation;
 	XMMATRIX m_viewMatrix;
-	float m_frameTime;
-	float yaw, pitch, roll;
+	XMMATRIX camRotationMatrix;
 };
 
 #endif

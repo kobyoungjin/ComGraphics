@@ -8,9 +8,7 @@ SystemClass::SystemClass()
 {
 	m_Input = 0;
 	m_Graphics = 0;
-	bool b_ambient = true;
-	bool b_diffuse = true;
-	bool b_specular = true;
+	speed = 0.2f;
 }
 
 
@@ -36,7 +34,7 @@ bool SystemClass::Initialize()
 
 	// Initialize the windows api.
 	InitializeWindows(screenWidth, screenHeight);
-
+	InitDirectInput();
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	m_Input = new InputClass;
 	if (!m_Input)
@@ -45,7 +43,12 @@ bool SystemClass::Initialize()
 	}
 
 	// Initialize the input object.
-	m_Input->Initialize();
+	result = m_Input->Initialize(m_hinstance, m_hwnd, screenWidth, screenHeight);
+	if (!result)
+	{
+		MessageBox(m_hwnd, L"Could not initialize the input object.", L"Error", MB_OK);
+		return false;
+	}
 
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	m_Graphics = new GraphicsClass;
@@ -78,6 +81,7 @@ void SystemClass::Shutdown()
 	// Release the input object.
 	if (m_Input)
 	{
+		m_Input->Shutdown();
 		delete m_Input;
 		m_Input = 0;
 	}
@@ -93,7 +97,7 @@ void SystemClass::Run()
 {
 	MSG msg;
 	bool done, result;
-
+	char key;
 
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
@@ -124,123 +128,31 @@ void SystemClass::Run()
 			}
 		}
 
+		// Do the input frame processing.
+		result = m_Input->Frame();
+		if (!result)
+		{
+			done = true;
+		}
+
+		if (m_Input->IsEscapePressed() == true)
+		{
+			done = true;
+		}
 	}
 
 	return;
 }
 
-
 bool SystemClass::Frame()
 {
 	bool result;
-	DIMOUSESTATE mouseCurrState;
-	m_Input->GetDiMouse()->Acquire();
-	m_Input->GetDiMouse()->GetDeviceState(sizeof(DIMOUSESTATE), &mouseCurrState);
+	int mouseX, mouseY;
 
-	// Check if the user pressed escape and wants to exit the application.
-	if (m_Input->IsKeyDown(VK_ESCAPE))
-	{
-		return false;
-	}
+	DetectInput();
 
-	if (m_Input->IsKeyDown(0x36))
-	{
-		while (1)
-		{
-			if (GetAsyncKeyState(0x36))
-			{
-				m_Input->KeyUp(0x36);
-				continue;
-			}
-
-			if (b_ambient)
-			{
-				m_Graphics->GetLightClass()->SetAmbientColor(0, 0, 0, 0);
-				b_ambient = false;
-				break;
-			}
-			else
-			{
-				m_Graphics->GetLightClass()->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
-				b_ambient = true;
-				break;
-			}
-		}
-	}
-
-	if (m_Input->IsKeyDown(0x37))
-	{
-		while (1)
-		{
-			if (GetAsyncKeyState(0x37))
-			{
-				m_Input->KeyUp(0x37);
-				continue;
-			}
-
-			if (b_diffuse)
-			{
-				m_Graphics->GetLightClass()->SetDiffuseColor(0.0f, 0.0f, 0.0f, 0.0f);
-				b_diffuse = false;
-				break;
-			}
-			else
-			{
-				m_Graphics->GetLightClass()->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
-				b_diffuse = true;
-				break;
-			}
-		}
-	}
-
-	if (m_Input->IsKeyDown(0x38))
-	{
-		while (1)
-		{
-			if (GetAsyncKeyState(0x38))
-			{
-				m_Input->KeyUp(0x38);
-				continue;
-			}
-
-			if (b_specular)
-			{
-				m_Graphics->GetLightClass()->SetSpecularColor(0, 0, 0, 0);
-				m_Graphics->GetLightClass()->SetSpecularPower(0);
-				b_specular = false;
-				break;
-			}
-			else
-			{
-				m_Graphics->GetLightClass()->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
-				m_Graphics->GetLightClass()->SetSpecularPower(32.0f);
-				b_specular = true;
-				break;
-			}
-		}
-
-	}
-
-	if (m_Input->IsKeyDown(0x41) || m_Input->IsKeyDown(0x61))  // A
-	{
-		m_Graphics->GetCamerClass()->MovePosition(-2.0f, 0, 0);
-	}
-	if (m_Input->IsKeyDown(0x53) || m_Input->IsKeyDown(0x73))  // S
-	{
-		m_Graphics->GetCamerClass()->MovePosition(0, 0, -2.0f);
-	}
-	if (m_Input->IsKeyDown(0x44) || m_Input->IsKeyDown(0x64))  // D
-	{
-		m_Graphics->GetCamerClass()->MovePosition(2.0f, 0, 0);
-	}
-	if (m_Input->IsKeyDown(0x57) || m_Input->IsKeyDown(0x77))  // W
-	{
-		m_Graphics->GetCamerClass()->MovePosition(0, 0, 2.0f);
-	}
-	m_Input->MouseInput(mouseCurrState);
-
-	// Do the frame processing for the graphics object.
-	result = m_Graphics->Frame();
+	m_Input->GetMouseLocation(mouseX, mouseY);
+	result = m_Graphics->Frame(mouseX, mouseY);
 	if (!result)
 	{
 		return false;
@@ -255,26 +167,26 @@ LRESULT CALLBACK SystemClass::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam
 	switch (umsg)
 	{
 		// Check if a key has been pressed on the keyboard.
-	case WM_KEYDOWN:
-	{
-		// If a key is pressed send it to the input object so it can record that state.
-		m_Input->KeyDown((unsigned int)wparam);
-		return 0;
-	}
+		case WM_KEYDOWN:
+		{
+			// If a key is pressed send it to the input object so it can record that state.
+			//m_Input->KeyDown((unsigned int)wparam);
+			return 0;
+		}
 
 	// Check if a key has been released on the keyboard.
-	case WM_KEYUP:
-	{
+		case WM_KEYUP:
+		{
 		// If a key is released then send it to the input object so it can unset the state for that key.
-		m_Input->KeyUp((unsigned int)wparam);
+		//m_Input->KeyUp((unsigned int)wparam);
 		return 0;
-	}
+		}
 
 	// Any other messages send to the default message handler as our application won't make use of them.
-	default:
-	{
-		return DefWindowProc(hwnd, umsg, wparam, lparam);
-	}
+		default:
+		{
+			return DefWindowProc(hwnd, umsg, wparam, lparam);
+		}
 	}
 }
 
@@ -336,8 +248,8 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	else
 	{
 		// If windowed then set it to 800x600 resolution.
-		screenWidth = 800;
-		screenHeight = 600;
+		screenWidth = 1600;
+		screenHeight = 900;
 
 		// Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
@@ -411,4 +323,70 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 			return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
 		}
 	}
+}
+
+bool SystemClass::InitDirectInput()
+{
+	DirectInput8Create(m_hinstance,
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8,
+		(void**)&DirectInput,
+		NULL);
+
+	DirectInput->CreateDevice(GUID_SysKeyboard,
+		&DIKeyboard,
+		NULL);
+
+	DirectInput->CreateDevice(GUID_SysMouse,
+		&DIMouse,
+		NULL);
+
+	DIKeyboard->SetDataFormat(&c_dfDIKeyboard);
+	DIKeyboard->SetCooperativeLevel(m_hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+
+	DIMouse->SetDataFormat(&c_dfDIMouse);
+	DIMouse->SetCooperativeLevel(m_hwnd, DISCL_EXCLUSIVE | DISCL_NOWINKEY | DISCL_FOREGROUND);
+
+	return true;
+}
+
+void SystemClass::DetectInput()
+{
+	DIMOUSESTATE mouseCurrState;
+	BYTE keyboardState[256];
+
+	DIKeyboard->Acquire();
+	DIMouse->Acquire();
+
+	DIMouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseCurrState);
+
+	DIKeyboard->GetDeviceState(sizeof(keyboardState), (LPVOID)&keyboardState);
+
+	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
+	{
+		m_Graphics->camYaw += mouseLastState.lX * 0.001f;
+
+		m_Graphics->camPitch -= mouseCurrState.lY * 0.001f;
+
+		mouseLastState = mouseCurrState;
+	}
+
+	if (keyboardState[DIK_A] & 0x80)
+	{
+		m_Graphics->moveLeftRight += speed;
+	}
+	if (keyboardState[DIK_D] & 0x80)
+	{
+		m_Graphics->moveLeftRight -= speed;
+	}
+	if (keyboardState[DIK_W] & 0x80)
+	{
+		m_Graphics->moveBackForward += speed;
+	}
+	if (keyboardState[DIK_S] & 0x80)
+	{
+		m_Graphics->moveBackForward -= speed;
+	}
+
+	return;
 }

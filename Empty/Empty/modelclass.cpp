@@ -31,15 +31,13 @@ ModelClass::~ModelClass()
 
 bool ModelClass::Initialize(ID3D11Device* device, const WCHAR* modelFilename, const WCHAR* textureFilename)
 {
-	bool result;
-
+	bool result;;
 	// Load in the model data,
 	result = LoadModel(modelFilename);
 	if (!result)
 	{
 		return false;
 	}
-
 	// Initialize the vertex and index buffers.
 	result = InitializeBuffers(device);
 	if(!result)

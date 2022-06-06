@@ -3,7 +3,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef _D3DCLASS_H_
 #define _D3DCLASS_H_
-
+#define DIRECTINPUT_VERSION 0x0800
 
 /////////////
 // LINKING //
@@ -11,6 +11,8 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+#pragma comment (lib, "dinput8.lib")
+#pragma comment (lib, "dxguid.lib")
 
 //////////////
 // INCLUDES //
@@ -19,6 +21,8 @@
 #include <d3dcommon.h>
 #include <d3d11.h>
 #include <directxmath.h>
+#include <dinput.h>
+#include <dwrite.h>
 
 #include "AlignedAllocationPolicy.h"
 

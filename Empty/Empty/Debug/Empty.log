@@ -1,2 +1,8 @@
-﻿  inputclass.cpp
+﻿  graphicsclass.cpp
+  main.cpp
+  modelclass.cpp
+  systemclass.cpp
+E:\Github\ComGraphics\Empty\Empty\systemclass.cpp(54,32): warning C4316: 'GraphicsClass': 힙에 할당된 개체가 16에 맞추어져 있지 않을 수도 있습니다
+E:\Github\ComGraphics\Empty\Empty\systemclass.cpp(100,7): warning C4101: 'key' :참조되지 않은 지역 변수입니다.
+  코드를 생성하고 있습니다...
   Empty.vcxproj -> E:\Github\ComGraphics\Empty\Debug\Empty.exe

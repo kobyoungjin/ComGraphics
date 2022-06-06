@@ -62,6 +62,7 @@ public:
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
+
 	int GetIndexCount();
 	int GetVertexCount();
 	int GetInstanceCount();
@@ -69,7 +70,6 @@ public:
 
 	bool LoadModel(const WCHAR*);
 	void ReleaseModel();
-
 
 private:
 	bool InitializeBuffers(ID3D11Device*);
@@ -81,10 +81,10 @@ private:
 
 	bool ReadFileCounts(const WCHAR*);
 	bool LoadDataStructures(const WCHAR*, int, int, int, int);
-
+	
 private:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer, *m_instanceBuffer;
-	int m_vertexCount, m_indexCount, m_instanceCount, m_textureCount, m_normalCount, m_faceCount;
+	int m_vertexCount, m_indexCount, m_textureCount, m_normalCount, m_faceCount, m_instanceCount;
 	TextureClass* m_Texture;
 
 	ModelType* m_model;

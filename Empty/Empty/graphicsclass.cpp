@@ -8,6 +8,7 @@ GraphicsClass::GraphicsClass()
 {
 	m_D3D = 0;
 	m_Camera = 0;
+	m_Text = 0;
 	m_Model = 0;
 	m_Model2 = 0;
 	m_LightShader = 0;
@@ -28,7 +29,7 @@ GraphicsClass::~GraphicsClass()
 bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
 	bool result;
-
+	XMMATRIX baseViewMatrix;
 
 	// Create the Direct3D object.
 	m_D3D = new D3DClass;
@@ -62,7 +63,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	{
 		return false;
 	}
-
 	// Initialize the model object.
 	result = m_Model->Initialize(m_D3D->GetDevice(), L"./data/cube.obj", L"./data/brick.dds");
 	if(!result)
@@ -118,6 +118,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Light->SetSpecularColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetSpecularPower(32.0f);
 
+	m_Camera->Render(camYaw, camPitch, moveLeftRight, moveBackForward, defaultForward, defaultRight);
+	m_Camera->GetViewMatrix(baseViewMatrix);
+
 	return true;
 }
 
@@ -172,12 +175,18 @@ void GraphicsClass::Shutdown()
 	return;
 }
 
-bool GraphicsClass::Frame()
+bool GraphicsClass::Frame(int mouseX, int mouseY)
 {
 	bool result;
 
 	static float rotation = 0.0f;
 
+	// Set the location of the mouse.
+	/*result = m_Text->SetMousePosition(mouseX, mouseY, m_D3D->GetDeviceContext());
+	if (!result)
+	{
+		return false;
+	}*/
 
 	// Update the rotation variable each frame.
 	rotation += XM_PI * 0.005f;
@@ -214,8 +223,12 @@ bool GraphicsClass::Render(float rotation)
 	// Clear the buffers to begin the scene.
 	m_D3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
+
 	// Generate the view matrix based on the camera's position.
-	m_Camera->Render();
+	m_Camera->Render(camYaw, camPitch, moveLeftRight, moveBackForward, defaultForward, defaultRight);
+
+	moveLeftRight = 0.0f;
+	moveBackForward = 0.0f;
 
 	// Get the world, view, and projection matrices from the camera and d3d objects.
 	m_Camera->GetViewMatrix(viewMatrix);

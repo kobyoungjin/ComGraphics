@@ -37,8 +37,17 @@ public:
 	bool Initialize();
 	void Shutdown();
 	void Run();
+	void DetectInput();
+	bool InitDirectInput();
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
+public:
+
+	IDirectInputDevice8* DIKeyboard;
+	IDirectInputDevice8* DIMouse;
+
+	DIMOUSESTATE mouseLastState;
+	LPDIRECTINPUT8 DirectInput;
 
 private:
 	bool Frame();
@@ -53,9 +62,7 @@ private:
 	InputClass* m_Input;
 	GraphicsClass* m_Graphics;
 
-	bool b_ambient;
-	bool b_diffuse;
-	bool b_specular;
+	float speed;
 };
 
 
