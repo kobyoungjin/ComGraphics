@@ -176,8 +176,13 @@
     <ClCompile Include="textureshaderclass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="data\Bird.dds" />
     <Image Include="data\chair_d.dds" />
+    <Image Include="data\image.dds" />
+    <Image Include="data\leave.dds" />
     <Image Include="data\seafloor.dds" />
+    <Image Include="data\sky.dds" />
+    <Image Include="data\tree.dds" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\color.ps" />

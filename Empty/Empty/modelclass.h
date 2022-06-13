@@ -55,6 +55,7 @@ private:
 
 public:
 	ModelClass();
+	ModelClass(int, XMFLOAT3);
 	ModelClass(const ModelClass&);
 	~ModelClass();
 
@@ -88,6 +89,7 @@ private:
 	TextureClass* m_Texture;
 
 	ModelType* m_model;
+	InstanceType* instances;
 };
 
 #endif

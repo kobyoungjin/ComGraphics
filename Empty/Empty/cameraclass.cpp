@@ -39,8 +39,7 @@ void CameraClass::SetRotation(float x, float y, float z)
 	m_rotation.y = y;
 	m_rotation.z = z;
 }
-
-
+ 
 
 XMFLOAT3 CameraClass::GetPosition()
 {
@@ -53,6 +52,10 @@ XMFLOAT3 CameraClass::GetRotation()
 	return m_rotation;
 }
 
+XMVECTOR CameraClass::GetCamPos()
+{
+	return camPosition;
+}
 
 // This uses the position and rotation of the camera to build and to update the view matrix.
 void CameraClass::Render(float camYaw, float camPitch, float moveLeftRight, float moveBackForward, XMVECTOR defaultRight, XMVECTOR defaultForward)
@@ -72,7 +75,7 @@ void CameraClass::Render(float camYaw, float camPitch, float moveLeftRight, floa
 	
 	camPosition += moveLeftRight * m_camRight;
 	camPosition += moveBackForward * m_camForward;
-
+;
 	camTarget = camPosition + camTarget;
 
 	m_viewMatrix = XMMatrixLookAtLH(camPosition, camTarget, camUp);

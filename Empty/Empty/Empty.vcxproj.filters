@@ -121,6 +121,21 @@
     <Image Include="data\seafloor.dds">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="data\Bird.dds">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="data\leave.dds">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="data\tree.dds">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="data\sky.dds">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="data\image.dds">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\color.ps">

@@ -11,11 +11,19 @@ ModelClass::ModelClass()
 	m_instanceBuffer = 0;
 	m_Texture = 0;
 	m_model = 0;
+	instances = 0;
 
 	m_textureCount = 0;
 	m_normalCount = 0;
 	m_faceCount = 0;
 	m_instanceCount = 0;
+}
+
+ModelClass::ModelClass(int instanceCount, XMFLOAT3 position)
+{
+	this->m_instanceCount = instanceCount;
+	instances = new InstanceType[m_instanceCount];
+	instances->position = position;
 }
 
 
@@ -110,6 +118,8 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	HRESULT result;
 	int i;
 
+	srand(time(NULL));
+
 	// Create the vertex array.
 	vertices = new VertexType[m_vertexCount];
 	if(!vertices)
@@ -174,27 +184,38 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
-	// 배열의 인스턴스 수를 설정합니다.
-	m_instanceCount = 10;
-
-	// 인스턴스 배열을 만듭니다.
-	InstanceType* instances = new InstanceType[m_instanceCount];
+	
 	if (!instances)
 	{
 		return false;
 	}
 
-	// 데이터로 인스턴스 배열을 로드합니다.
-	for (int i = 0; i < 5; i++)
+	if(m_instanceCount == 1)
+		instances[0].position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	else if (m_instanceCount == 2)
 	{
-		instances[i].position = XMFLOAT3(i * 20.0f - 40.0f, 0.0f, 0.0f);
+		instances[0].position = XMFLOAT3(20.0f, 0.0f, -20.0f);
+		instances[1].position = XMFLOAT3(-10.0f, 0.0f, 5.0f);
 	}
-	for (int i = 0; i < 5; i++)
+	else
 	{
-		instances[i + 5].position = XMFLOAT3(i * 20.0f - 40.0f, 5.0f, -20.0f);
+		// 데이터로 인스턴스 배열을 로드합니다.
+		for (int i = 0; i < m_instanceCount; i++)
+		{
+			int x = rand() % 20;
+			int z = rand() % 20;
+			int a = rand() % 2;
+			int b = rand() % 2;
+
+			if (a == 0)
+				x = x * -1;
+			if (b == 0)
+				z = z * -1;
+			
+			instances[i].position = XMFLOAT3((float)x, 0.0f, (float)z);
+		}
 	}
 	
-
 	// 인스턴스 버퍼의 설명을 설정합니다.
 	D3D11_BUFFER_DESC instanceBufferDesc;
 	instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;

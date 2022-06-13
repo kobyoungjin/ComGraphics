@@ -48,6 +48,7 @@ public:
 
 	DIMOUSESTATE mouseLastState;
 	LPDIRECTINPUT8 DirectInput;
+	
 
 private:
 	bool Frame();

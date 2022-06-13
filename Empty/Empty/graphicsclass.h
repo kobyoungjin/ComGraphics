@@ -48,18 +48,29 @@ public:
 	float camYaw = 0.0f;
 	float camPitch = 0.0f;
 
+	float xAngle = 0;
+	float yAngle = 0;
+	XMFLOAT3 birdPos;
+
 private:
 	D3DClass* m_D3D;
 	CameraClass* m_Camera;
 	TextClass* m_Text;
 
-	ModelClass* m_Model, * m_Model2;
+	ModelClass* m_Model, * m_Model2, * bird, * flower, * banana, * tree, * tree2, * pumpkin;
 
 	LightShaderClass* m_LightShader;
-	LightClass* m_Light;
+	LightClass* m_Light, * m_Light2;
 
 	XMVECTOR defaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	XMVECTOR defaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+
+	XMMATRIX worldMatrixForObj;
+	XMMATRIX rotateMatrixForObj;
+	XMMATRIX transformMatrixForObj;
+	XMMATRIX scaleMatrixForObj = XMMatrixScaling(0.02f, 0.02f, 0.02f);
+
+	XMMATRIX temp = XMMatrixTranslation(0.0f, 0.2f, -2.0f);
 };
 
 #endif

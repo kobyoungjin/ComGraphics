@@ -39,6 +39,7 @@ public:
 
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetRotation();
+	XMVECTOR GetCamPos();
 
 	void Render(float, float, float, float, XMVECTOR, XMVECTOR);
 	void GetViewMatrix(XMMATRIX&);

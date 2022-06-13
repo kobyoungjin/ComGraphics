@@ -365,7 +365,6 @@ void SystemClass::DetectInput()
 	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
 	{
 		m_Graphics->camYaw += mouseLastState.lX * 0.001f;
-
 		m_Graphics->camPitch -= mouseCurrState.lY * 0.001f;
 
 		mouseLastState = mouseCurrState;
@@ -374,18 +373,22 @@ void SystemClass::DetectInput()
 	if (keyboardState[DIK_A] & 0x80)
 	{
 		m_Graphics->moveLeftRight += speed;
+		m_Graphics->birdPos.x -= speed;
 	}
 	if (keyboardState[DIK_D] & 0x80)
 	{
 		m_Graphics->moveLeftRight -= speed;
+		m_Graphics->birdPos.x += speed;
 	}
 	if (keyboardState[DIK_W] & 0x80)
 	{
 		m_Graphics->moveBackForward += speed;
+		m_Graphics->birdPos.z -= speed;
 	}
 	if (keyboardState[DIK_S] & 0x80)
 	{
 		m_Graphics->moveBackForward -= speed;
+		m_Graphics->birdPos.z -= speed;
 	}
 
 	return;
